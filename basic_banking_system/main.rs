@@ -1,10 +1,9 @@
 // create Accoaunt trait to define methods
-trait Account<BankAccount> {
-    fn deposit(&mut self);
-    fn withdraw(&mut self);
-    fn balance(&mut self);
+trait Account {
+    fn deposit(&mut self, amount: f64) -> Result<(), String>;
+    fn withdraw(&mut self, amount: f64) -> Result<(), String>;
+    fn balance(&self) -> Result<f64, String>;
 }
-
 // BankAccount struct
 struct BankAccount<'a> {
     account_number: u32,
@@ -13,13 +12,14 @@ struct BankAccount<'a> {
 }
 
 // implement the methods logic
-impl BankAccount<'_> {
+impl Account for BankAccount<'_> {
     // deposit amount function
-    // @param amount u32
+    // @param amount f64
     // must be positive number
-    // returns a Result
-    fn deposit(&mut self, amount: f64) {
+    // returns a Result with unit or Err string
+    fn deposit(&mut self, amount: f64) -> Result<(), String> {
         self.balance += amount;
+        Ok(())
     }
 
     // withdraw amount function
@@ -31,7 +31,7 @@ impl BankAccount<'_> {
         // check if the user have the amount available
         // if not, returns a error with a message
         if self.balance < amount {
-            return Err("not enough amount to withdraw!".to_string());
+            return Err("Not enough money to withdraw!".to_string());
         }
 
         // if the user have the amount to withdraw
@@ -41,9 +41,9 @@ impl BankAccount<'_> {
     }
 
     // balance function
-    // returns a Result with the amount of user's balance
-    fn balance(&self) -> f64 {
-        self.balance
+    // returns a Result with the amount of user's balance f64 or Err
+    fn balance(&self) -> Result<f64, String> {
+        Ok(self.balance)
     }
 }
 
@@ -65,56 +65,27 @@ fn main() {
     let deposit_amount = 100.00;
     let withdraw_amount = 50.0;
 
-    // Deposit amount to first account and print the result
-    account_number_one.deposit(deposit_amount);
-    println!(
-        "Deposit of ${} in the account number: {} successfully done!",
-        deposit_amount, account_number_one.account_number,
-    );
+    // Deposit a $hundred into bank account one
+    match account_number_one.deposit(deposit_amount) {
+        Ok(()) => println!("Deposit amount done with success!"),
+        Err(message) => println!("Error: {}.", message),
+    }
 
-    // Deposit amount to second account and print the result
-    account_number_two.deposit(deposit_amount);
-    println!(
-        "Deposit of ${} in the account number: {} successfully done!",
-        deposit_amount, account_number_two.account_number,
-    );
+    // Withdraw a $hundred from bank account one
+    match account_number_one.withdraw(withdraw_amount) {
+        Ok(()) => println!("Withdraw amount done with success!"),
+        Err(e) => println!("Error: {}.", e),
+    }
 
-    // Withdraw amount to first account and print the result
-    account_number_one.withdraw(withdraw_amount).unwrap();
-    println!(
-        "Withdraw of ${} in the account number: {} successfully done!",
-        withdraw_amount, account_number_one.account_number,
-    );
+    // Getting balance from account number one
+    match account_number_one.balance() {
+        Ok(value) => println!("Your total balance value is: {}", value),
+        Err(e) => println!("Error: {}", e),
+    }
 
-    // Deposit amount to second account and print the result
-    account_number_two.withdraw(withdraw_amount).unwrap();
-    println!(
-        "Withdraw of ${} in the account number: {} successfully done!",
-        withdraw_amount, account_number_two.account_number,
-    );
-
-    // Get the balance of first account and print it
-    let balance = account_number_one.balance();
-    println!(
-        "Balance of account number {} from account name: {} is: ${}",
-        account_number_one.account_number, account_number_one.holder_name, balance,
-    );
-
-    // Get the balance of second account and print it
-    let balance = account_number_two.balance();
-    println!(
-        "Balance of account number {} from account name: {} is: ${}",
-        account_number_two.account_number, account_number_two.holder_name, balance,
-    );
-
-    // Must get an error for withdraw without money
-    let result = account_number_one.withdraw(200.00);
-    if let Ok(()) = result {
-        println!(
-            "Withdraw of ${} in the account number: {} successfully done!",
-            withdraw_amount, account_number_one.account_number,
-        );
-    } else {
-        println!("{:?}", result);
-    };
+    // Withdraw more money that the account have (forced error)
+    match account_number_one.withdraw(withdraw_amount * 2.0) {
+        Ok(()) => println!("Withdraw amount done with success!"),
+        Err(e) => println!("Error: {}", e),
+    }
 }
