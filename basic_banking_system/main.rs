@@ -55,13 +55,6 @@ fn main() {
         balance: 0.0,
     };
 
-    // create a bank account instance number two
-    let mut account_number_two = BankAccount {
-        account_number: 2,
-        holder_name: "The Dude with the Second Account",
-        balance: 0.0,
-    };
-
     let deposit_amount = 100.00;
     let withdraw_amount = 50.0;
 

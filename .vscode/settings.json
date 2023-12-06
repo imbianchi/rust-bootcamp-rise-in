@@ -1,7 +1,10 @@
 {
     "rust-analyzer.linkedProjects": [
-        "./Cargo.toml",
-        "./simple_calculator/Cargo.toml"
+        "./simple_calculator/Cargo.toml",
+        "./basic_banking_system/Cargo.toml",
+        "./concatenate_strings/Cargo.toml",
+        "./rusty_store_management_system/Cargo.toml",
+        "./rusty_store_management_system/Cargo.toml"
     ],
-    "rust-analyzer.showUnlinkedFileNotification": false
+    "rust-analyzer.showUnlinkedFileNotification": true
 }
