@@ -1,5 +1,7 @@
-mod terminal;
-
+mod screens;
+use screens::{Screen, Screens};
 fn main() {
-    terminal::Terminal::run().unwrap();
+    Screen::new()
+        .unwrap()
+        .run_screen(Screens::Welcome);
 }
