@@ -46,9 +46,10 @@ impl Screen {
         Ok(Self { terminal })
     }
 
-    pub fn run_screen(&mut self, screen: Screens) {
+    pub fn run_screen(&mut self, screen: Screens) -> Result<(), Error> {
         match screen {
             Screens::Welcome => &Self::welcome_screen(self),
+            Screens::Login => &Self::login_screen(self),
             _ => unimplemented!(),
         };
     }
@@ -62,11 +63,13 @@ impl Screen {
             f.render_widget(block, size);
         })?;
 
-        thread::sleep(Duration::from_millis(3000));
-
-        self.close_terminal();
+        self.run_screen(Screens::Login);
 
         Ok(())
+    }
+
+    fn login_screen(&mut self) {
+        unimplemented!()
     }
 
     fn close_terminal(&mut self) -> Result<(), Error>{
@@ -83,7 +86,7 @@ impl Screen {
         Ok(())
     }
 
-    fn error_loading_screen(&self) {
-        unimplemented!()
+    fn error_loading_screen(&self) -> Result<(), Error> {
+        Ok(())
     }
 }
