@@ -57,23 +57,63 @@ impl Screen {
         };
     }
 
-    fn wireframe_screen(&mut self, text: &str) {
-        let _ = &mut self.terminal.draw(|f| {
-            let size = f.size();
-            let block = Block::default()
-                .title(text)
-                .borders(Borders::ALL);
-            f.render_widget(block, Rect {
-                height: size.height - 5,
-                width: size.width,
-                x: size.x,
-                y: size.y,
-            });
-        }).expect("Error loading wireframe.");
+    fn main_wireframe(&mut self, title: Option<&str>) {
+        let _ = &mut self
+            .terminal
+            .draw(|f| {
+                let size = f.size();
+                let block = Block::default().borders(Borders::ALL);
+
+                let mut cloned_block: Block = block.clone();
+                if let Some(value) = title {
+                    cloned_block = cloned_block.title(value);
+                };
+
+                f.render_widget(
+                    cloned_block,
+                    Rect {
+                        height: size.height - 5,
+                        width: size.width,
+                        x: size.x,
+                        y: size.y,
+                    },
+                );
+            })
+            .expect("Error loading wireframe.");
+    }
+
+    fn wireframe_screen(&mut self, title: Option<&str>, size: Option<Rect>) {
+        let _ = &mut self
+            .terminal
+            .draw(|f| {
+                let size = f.size();
+                let block = Block::default().borders(Borders::ALL);
+
+                let mut cloned_block: Block = block.clone();
+                if let Some(value) = title {
+                    cloned_block = cloned_block.title(value);
+                };
+
+                f.render_widget(cloned_block, size)
+            })
+            .expect("Error loading wireframe.");
     }
 
     fn welcome_screen(&mut self) -> Result<(), Error> {
-        self.wireframe_screen("# JP CLI Store Management #");
+        self.main_wireframe(Some("# JP CLI Store Management #"));
+
+        let size = self.terminal.size().unwrap();
+        let block = Block::default().borders(Borders::ALL);
+        
+        self.wireframe_screen(
+            None,
+            Some(Rect {
+                x: size.x,
+                y: size.y,
+                width: size.width - 50,
+                height: size.height - 50,
+            }),
+        );
 
         thread::sleep(Duration::from_millis(5000));
 
@@ -94,7 +134,7 @@ impl Screen {
     }
 
     fn dashboard_screen(&mut self) -> Result<(), Error> {
-        Ok(self.wireframe_screen("DASHBOARD"))
+        Ok(self.wireframe_screen(Some("DASHBOARD"), None))
     }
 
     fn login_screen(&mut self) -> Result<(), Error> {
