@@ -4,6 +4,7 @@
         "./basic_banking_system/Cargo.toml",
         "./concatenate_strings/Cargo.toml",
         "./rusty_store_management_system/Cargo.toml",
+        "./rusty_store_management_system/Cargo.toml",
         "./rusty_store_management_system/Cargo.toml"
     ],
     "rust-analyzer.showUnlinkedFileNotification": true

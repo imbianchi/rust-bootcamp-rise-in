@@ -1,48 +1,16 @@
-use std::io::Error;
+mod home;
 
 
 pub enum Screens {
-    Login,
-    Dashboard,
-    CreateUser,
-    DeleteUser,
-    CrateProduct,
-    EditProduct,
-    DeleteProduct,
-    GetSalesHistory,
-    GetPuschaseHistory,
-    Report,
-    Error,
+    Home,
 }
 
 pub struct Screen {}
 
 impl Screen {
-    pub fn new() -> Result<Self, Error> {
-        Ok(Self {})
-    }
-
-    pub fn run_screen(&mut self, screen: Screens) {
+    pub fn load(screen: Screens) {
         match screen {
-            Screens::Login => &Self::login_screen(self).unwrap(),
-            Screens::Dashboard => &Self::dashboard_screen(self).unwrap(),
-            _ => unimplemented!(),
+            Screens::Home => home::run(),
         };
-    }
-
-    fn dashboard_screen(&mut self) -> Result<(), Error> {
-        unimplemented!()
-    }
-
-    fn login_screen(&mut self) -> Result<(), Error> {
-        Ok(())
-    }
-
-    fn close_terminal(&mut self) -> Result<(), Error> {
-        unimplemented!()
-    }
-
-    fn error_loading_screen(&self) -> Result<(), Error> {
-        Ok(())
     }
 }
